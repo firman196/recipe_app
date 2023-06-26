@@ -28,6 +28,7 @@ type Resep struct {
 	KategoriId uint      `gorm:"not null; autoIncrement:false" json:"kategori_id" binding:"required"`
 	CreatedAt  time.Time `json:"created_at"`
 	UpdatedAt  time.Time `json:"updated_at"`
+	Kategori   Kategori  `gorm:"foreignKey:KategoriId;references:Id;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
 }
 
 type Komposisi struct {
@@ -37,4 +38,6 @@ type Komposisi struct {
 	Takaran   string    `gorm:"size:100;not null" json:"name" binding:"required"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
+	Bahan     Bahan     `gorm:"foreignKey:BahanId;references:Id;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
+	Resep     Resep     `gorm:"foreignKey:ResepId;references:Id;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
 }
