@@ -142,3 +142,26 @@ func (h *KategoriHandlerImpl) Delete(c *gin.Context) {
 	response := utils.ApiResponse("Get data kategori success", http.StatusOK, "success", kategori)
 	c.JSON(http.StatusOK, response)
 }
+
+// GetAll 				godoc
+// @Summary				Get all data kategori.
+// @Param				page query int64 true "page number"
+// @Param				limit query int64 true "limit number"
+// @Description			Return data master kategori with pagination.
+// @Produce				application/json
+// @Tags				kategori
+// @Success				200 {object} utils.Response
+// @Router				/api/v1/kategori [get]
+func (h *KategoriHandlerImpl) GetAll(c *gin.Context) {
+	pagination := utils.Pagination(c)
+
+	response, totalRows, err := h.kategoriUsecase.GetAll(&pagination)
+	if err != nil {
+		response := utils.ApiResponseWithPaginate("Get all data kategori failed", http.StatusBadRequest, "error", err, &totalRows)
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
+	responses := utils.ApiResponseWithPaginate("Get data kategori success", http.StatusOK, "success", response, &totalRows)
+	c.JSON(http.StatusOK, responses)
+}

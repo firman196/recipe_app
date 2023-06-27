@@ -53,6 +53,18 @@ func (u *KategoriUsecaseImpl) GetById(id uint) (*models.Kategori, error) {
 	return response, nil
 }
 
+func (u *KategoriUsecaseImpl) GetAll(pagination *models.PaginationInput) (*[]models.Kategori, int64, error) {
+	var kategori models.Kategori
+
+	response, totalRows, err := u.kategoriRepository.FindAll(kategori, pagination)
+
+	if err != nil {
+		return nil, 0, err
+	}
+
+	return response, totalRows, err
+}
+
 func (u *KategoriUsecaseImpl) Delete(id uint) (bool, error) {
 	kategori, err := u.kategoriRepository.FindById(id)
 	if err != nil || kategori == nil {

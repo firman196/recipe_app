@@ -29,6 +29,18 @@ func (u *BahanUsecaseImpl) Create(bahan models.BahanInput) (*models.Bahan, error
 	return response, nil
 }
 
+func (u *BahanUsecaseImpl) GetAll(pagination *models.PaginationInput) (*[]models.Bahan, int64, error) {
+	var bahans models.Bahan
+
+	response, totalRows, err := u.bahanRepository.FindAll(bahans, pagination)
+
+	if err != nil {
+		return nil, 0, err
+	}
+
+	return response, totalRows, err
+}
+
 func (u *BahanUsecaseImpl) Update(id uint, bahan models.BahanInput) (*models.Bahan, error) {
 	val, err := u.bahanRepository.FindById(id)
 	if err != nil || val == nil {

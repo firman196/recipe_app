@@ -67,6 +67,7 @@ func main() {
 	api := router.Group("/api/v1")
 	//route master bahan
 	bahanRouter := api.Group("/bahan")
+	bahanRouter.GET("", bahanHandler.GetAll)
 	bahanRouter.POST("", bahanHandler.Create)
 	bahanRouter.PUT("/:id", bahanHandler.Update)
 	bahanRouter.GET("/:id", bahanHandler.GetById)
@@ -74,6 +75,7 @@ func main() {
 
 	//route master kategori
 	kategoriRouter := api.Group("/kategori")
+	kategoriRouter.GET("", kategoriHandler.GetAll)
 	kategoriRouter.POST("", kategoriHandler.Create)
 	kategoriRouter.PUT("/:id", kategoriHandler.Update)
 	kategoriRouter.GET("/:id", kategoriHandler.GetById)

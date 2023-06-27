@@ -142,3 +142,26 @@ func (h *BahanHandlerImpl) Delete(c *gin.Context) {
 	response := utils.ApiResponse("Get data bahan success", http.StatusOK, "success", bahan)
 	c.JSON(http.StatusOK, response)
 }
+
+// GetAll 				godoc
+// @Summary				Get all data bahan.
+// @Param				page query int64 true "page number"
+// @Param				limit query int64 true "limit number"
+// @Description			Return data master bahan with pagination.
+// @Produce				application/json
+// @Tags				bahan
+// @Success				200 {object} utils.Response
+// @Router				/api/v1/bahan [get]
+func (h *BahanHandlerImpl) GetAll(c *gin.Context) {
+	pagination := utils.Pagination(c)
+
+	response, totalRows, err := h.bahanUsecase.GetAll(&pagination)
+	if err != nil {
+		response := utils.ApiResponseWithPaginate("Get all data bahan failed", http.StatusBadRequest, "error", err, &totalRows)
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
+	responses := utils.ApiResponseWithPaginate("Get data bahan success", http.StatusOK, "success", response, &totalRows)
+	c.JSON(http.StatusOK, responses)
+}

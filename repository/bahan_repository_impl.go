@@ -42,3 +42,20 @@ func (r *BahanRepositoryImpl) FindById(id uint) (*models.Bahan, error) {
 
 	return &bahan, nil
 }
+
+func (r *BahanRepositoryImpl) FindAll(bahan models.Bahan, pagination *models.PaginationInput) (*[]models.Bahan, int64, error) {
+	var bahans []models.Bahan
+	var totalRows int64 = 0
+	offset := (pagination.Page - 1) * pagination.Limit
+	queryBuider := r.db.Limit(pagination.Limit).Offset(offset).Order(pagination.Sort)
+	result := queryBuider.Model(&models.Bahan{}).Where(bahan).Where("is_deleted=?", false).Find(&bahans)
+	if result.Error != nil {
+		err := result.Error
+		return nil, totalRows, err
+	}
+	errCount := r.db.Model(&models.Bahan{}).Where("is_deleted=?", false).Count(&totalRows).Error
+	if errCount != nil {
+		return nil, totalRows, errCount
+	}
+	return &bahans, totalRows, nil
+}

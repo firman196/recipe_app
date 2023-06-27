@@ -42,3 +42,20 @@ func (r *KategoriRepositoryImpl) FindById(id uint) (*models.Kategori, error) {
 
 	return &kategori, nil
 }
+
+func (r *KategoriRepositoryImpl) FindAll(kategori models.Kategori, pagination *models.PaginationInput) (*[]models.Kategori, int64, error) {
+	var kategories []models.Kategori
+	var totalRows int64 = 0
+	offset := (pagination.Page - 1) * pagination.Limit
+	queryBuider := r.db.Limit(pagination.Limit).Offset(offset).Order(pagination.Sort)
+	result := queryBuider.Model(&models.Kategori{}).Where(kategori).Where("is_deleted=?", false).Find(&kategories)
+	if result.Error != nil {
+		err := result.Error
+		return nil, totalRows, err
+	}
+	errCount := r.db.Model(&models.Kategori{}).Where("is_deleted=?", false).Count(&totalRows).Error
+	if errCount != nil {
+		return nil, totalRows, errCount
+	}
+	return &kategories, totalRows, nil
+}

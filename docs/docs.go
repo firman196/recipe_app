@@ -17,6 +17,40 @@ const docTemplate = `{
     "basePath": "{{.BasePath}}",
     "paths": {
         "/api/v1/bahan": {
+            "get": {
+                "description": "Return data master bahan with pagination.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "bahan"
+                ],
+                "summary": "Get all data bahan.",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "page number",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "limit number",
+                        "name": "limit",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            },
             "post": {
                 "description": "Create a new master data bahan.",
                 "produces": [
@@ -310,6 +344,9 @@ const docTemplate = `{
                 "data": {},
                 "meta": {
                     "$ref": "#/definitions/utils.Meta"
+                },
+                "total_list": {
+                    "type": "integer"
                 }
             }
         }

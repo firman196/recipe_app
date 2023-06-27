@@ -27,11 +27,36 @@ definitions:
       data: {}
       meta:
         $ref: '#/definitions/utils.Meta'
+      total_list:
+        type: integer
     type: object
 info:
   contact: {}
 paths:
   /api/v1/bahan:
+    get:
+      description: Return data master bahan with pagination.
+      parameters:
+      - description: page number
+        in: query
+        name: page
+        required: true
+        type: integer
+      - description: limit number
+        in: query
+        name: limit
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: Get all data bahan.
+      tags:
+      - bahan
     post:
       description: Create a new master data bahan.
       parameters:

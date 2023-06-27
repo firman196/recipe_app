@@ -7,4 +7,5 @@ type BahanUsecase interface {
 	Update(id uint, bahan models.BahanInput) (*models.Bahan, error)
 	GetById(id uint) (*models.Bahan, error)
 	Delete(id uint) (bool, error)
+	GetAll(pagination *models.PaginationInput) (*[]models.Bahan, int64, error)
 }
