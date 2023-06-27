@@ -176,6 +176,40 @@ const docTemplate = `{
             }
         },
         "/api/v1/kategori": {
+            "get": {
+                "description": "Return data master kategori with pagination.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "kategori"
+                ],
+                "summary": "Get all data kategori.",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "page number",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "limit number",
+                        "name": "limit",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            },
             "post": {
                 "description": "Create a new master data kategori.",
                 "produces": [

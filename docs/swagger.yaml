@@ -139,6 +139,29 @@ paths:
       tags:
       - bahan
   /api/v1/kategori:
+    get:
+      description: Return data master kategori with pagination.
+      parameters:
+      - description: page number
+        in: query
+        name: page
+        required: true
+        type: integer
+      - description: limit number
+        in: query
+        name: limit
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: Get all data kategori.
+      tags:
+      - kategori
     post:
       description: Create a new master data kategori.
       parameters:
