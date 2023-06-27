@@ -1,0 +1,198 @@
+definitions:
+  models.BahanInput:
+    properties:
+      nama:
+        type: string
+    required:
+    - nama
+    type: object
+  models.KategoriInput:
+    properties:
+      nama:
+        type: string
+    required:
+    - nama
+    type: object
+  utils.Meta:
+    properties:
+      code:
+        type: integer
+      message:
+        type: string
+      status:
+        type: string
+    type: object
+  utils.Response:
+    properties:
+      data: {}
+      meta:
+        $ref: '#/definitions/utils.Meta'
+    type: object
+info:
+  contact: {}
+paths:
+  /api/v1/bahan:
+    post:
+      description: Create a new master data bahan.
+      parameters:
+      - description: Create bahan
+        in: body
+        name: bahan
+        required: true
+        schema:
+          $ref: '#/definitions/models.BahanInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: Create bahan
+      tags:
+      - bahan
+  /api/v1/bahan/{id}:
+    get:
+      description: Return data master bahan where similar with id.
+      parameters:
+      - description: get bahan by id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: Get Single bahan by id.
+      tags:
+      - bahan
+    put:
+      description: Update data master bahan.
+      parameters:
+      - description: Update bahan
+        in: body
+        name: bahan
+        required: true
+        schema:
+          $ref: '#/definitions/models.BahanInput'
+      - description: find bahan by id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: Update bahan
+      tags:
+      - bahan
+  /api/v1/bahan/delete/{id}:
+    delete:
+      description: Return data boolean.
+      parameters:
+      - description: delete bahan by id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: Delete bahan by id.
+      tags:
+      - bahan
+  /api/v1/kategori:
+    post:
+      description: Create a new master data kategori.
+      parameters:
+      - description: Create kategori
+        in: body
+        name: kategori
+        required: true
+        schema:
+          $ref: '#/definitions/models.KategoriInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: Create kategori
+      tags:
+      - kategori
+  /api/v1/kategori/{id}:
+    get:
+      description: Return data master kategori where similar with id.
+      parameters:
+      - description: get kategori by id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: Get Single kategori by id.
+      tags:
+      - kategori
+    put:
+      description: Update data master kategori.
+      parameters:
+      - description: Update kategori
+        in: body
+        name: bahan
+        required: true
+        schema:
+          $ref: '#/definitions/models.KategoriInput'
+      - description: find kategori by id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: Update kategori
+      tags:
+      - kategori
+  /api/v1/kategori/delete/{id}:
+    delete:
+      description: Return data boolean.
+      parameters:
+      - description: delete kategori by id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: Delete kategori by id.
+      tags:
+      - kategori
+swagger: "2.0"

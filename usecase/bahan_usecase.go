@@ -3,7 +3,8 @@ package usecase
 import "Recipe_App/models"
 
 type BahanUsecase interface {
-	Create(bahan models.Bahan) (*models.Bahan, error)
-	Update(bahan models.Bahan) (*models.Bahan, error)
+	Create(bahan models.BahanInput) (*models.Bahan, error)
+	Update(id uint, bahan models.BahanInput) (*models.Bahan, error)
 	GetById(id uint) (*models.Bahan, error)
+	Delete(id uint) (bool, error)
 }

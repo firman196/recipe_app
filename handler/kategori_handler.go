@@ -2,7 +2,7 @@ package handler
 
 import "github.com/gin-gonic/gin"
 
-type BahanHandler interface {
+type KategoriHandler interface {
 	Create(c *gin.Context)
 	Update(c *gin.Context)
 	GetById(c *gin.Context)
