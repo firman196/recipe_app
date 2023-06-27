@@ -2,10 +2,19 @@ package main
 
 import (
 	database "Recipe_App/database/mysql"
+	"Recipe_App/handler"
 	"Recipe_App/models"
+	"Recipe_App/repository"
+	"Recipe_App/usecase"
 	"os"
 
+	"github.com/gin-contrib/cors"
+	"github.com/gin-gonic/gin"
 	"github.com/rs/zerolog/log"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
+
+	_ "Recipe_App/docs"
 
 	"github.com/joho/godotenv"
 )
@@ -37,4 +46,40 @@ func main() {
 	db.AutoMigrate(&models.Kategori{})
 	db.AutoMigrate(&models.Resep{})
 	db.AutoMigrate(&models.Komposisi{})
+
+	//repository layer
+	bahanRepository := repository.NewBahanRepositoryImpl(db)
+	kategoriRepository := repository.NewKategoriRepositoryImpl(db)
+
+	//usecase layer
+	bahanUsecase := usecase.NewBahanUsecaseImpl(bahanRepository)
+	kategoriUsecase := usecase.NewKategoriUsecaseImpl(kategoriRepository)
+
+	//handler layer
+	bahanHandler := handler.NewBahanHandlerImpl(bahanUsecase)
+	kategoriHandler := handler.NewKategoriHandlerImpl(kategoriUsecase)
+
+	router := gin.Default()
+	router.Use(cors.Default())
+	// route swagger
+	router.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+
+	api := router.Group("/api/v1")
+	//route master bahan
+	bahanRouter := api.Group("/bahan")
+	bahanRouter.GET("", bahanHandler.GetAll)
+	bahanRouter.POST("", bahanHandler.Create)
+	bahanRouter.PUT("/:id", bahanHandler.Update)
+	bahanRouter.GET("/:id", bahanHandler.GetById)
+	bahanRouter.DELETE("/delete/:id", bahanHandler.Delete)
+
+	//route master kategori
+	kategoriRouter := api.Group("/kategori")
+	kategoriRouter.GET("", kategoriHandler.GetAll)
+	kategoriRouter.POST("", kategoriHandler.Create)
+	kategoriRouter.PUT("/:id", kategoriHandler.Update)
+	kategoriRouter.GET("/:id", kategoriHandler.GetById)
+	kategoriRouter.DELETE("/delete/:id", kategoriHandler.Delete)
+
+	router.Run(":" + appPort)
 }
