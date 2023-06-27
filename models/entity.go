@@ -35,7 +35,7 @@ type Komposisi struct {
 	Id        uint      `gorm:"primaryKey; not null" json:"id"`
 	ResepId   uint      `gorm:"not null; autoIncrement:false" json:"resep_id" binding:"required"`
 	BahanId   uint      `gorm:"not null; autoIncrement:false" json:"bahan_id" binding:"required"`
-	Takaran   string    `gorm:"size:100;not null" json:"name" binding:"required"`
+	Takaran   string    `gorm:"size:100;not null" json:"takaran" binding:"required"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
 	Bahan     Bahan     `gorm:"foreignKey:BahanId;references:Id;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
