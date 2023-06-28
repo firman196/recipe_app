@@ -2,6 +2,7 @@ package repository
 
 import (
 	"Recipe_App/models"
+	"time"
 
 	"gorm.io/gorm"
 )
@@ -26,6 +27,7 @@ func (r *BahanRepositoryImpl) Create(bahan models.Bahan) (*models.Bahan, error) 
 }
 
 func (r *BahanRepositoryImpl) Update(bahan models.Bahan) (*models.Bahan, error) {
+	bahan.UpdatedAt = time.Now()
 	err := r.db.Model(&bahan).Where("id = ?", bahan.Id).Where("is_deleted =?", false).Updates(&bahan).Error
 	if err != nil {
 		return nil, err
@@ -43,12 +45,12 @@ func (r *BahanRepositoryImpl) FindById(id uint) (*models.Bahan, error) {
 	return &bahan, nil
 }
 
-func (r *BahanRepositoryImpl) FindAll(bahan models.Bahan, pagination *models.PaginationInput) (*[]models.Bahan, int64, error) {
+func (r *BahanRepositoryImpl) FindAll(pagination *models.PaginationInput) (*[]models.Bahan, int64, error) {
 	var bahans []models.Bahan
 	var totalRows int64 = 0
 	offset := (pagination.Page - 1) * pagination.Limit
 	queryBuider := r.db.Limit(pagination.Limit).Offset(offset).Order(pagination.Sort)
-	result := queryBuider.Model(&models.Bahan{}).Where(bahan).Where("is_deleted=?", false).Find(&bahans)
+	result := queryBuider.Model(&models.Bahan{}).Where("is_deleted=?", false).Find(&bahans)
 	if result.Error != nil {
 		err := result.Error
 		return nil, totalRows, err
