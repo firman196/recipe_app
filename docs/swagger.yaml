@@ -13,6 +13,30 @@ definitions:
     required:
     - nama
     type: object
+  models.KomposisiInput:
+    properties:
+      bahan_id:
+        type: integer
+      takaran:
+        type: string
+    required:
+    - bahan_id
+    - takaran
+    type: object
+  models.ResepInput:
+    properties:
+      kategori_id:
+        type: integer
+      komposisi:
+        items:
+          $ref: '#/definitions/models.KomposisiInput'
+        type: array
+      nama:
+        type: string
+    required:
+    - kategori_id
+    - nama
+    type: object
   utils.Meta:
     properties:
       code:
@@ -27,8 +51,6 @@ definitions:
       data: {}
       meta:
         $ref: '#/definitions/utils.Meta'
-      total_list:
-        type: integer
     type: object
 info:
   contact: {}
@@ -243,4 +265,86 @@ paths:
       summary: Delete kategori by id.
       tags:
       - kategori
+  /api/v1/resep:
+    post:
+      description: Create a new data resep.
+      parameters:
+      - description: Create resep
+        in: body
+        name: resep
+        required: true
+        schema:
+          $ref: '#/definitions/models.ResepInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: Create resep
+      tags:
+      - resep
+  /api/v1/resep/{id}:
+    get:
+      description: Return data resep where similar with id.
+      parameters:
+      - description: get resep by id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: Get Single resep by id.
+      tags:
+      - resep
+    put:
+      description: Update data master resep.
+      parameters:
+      - description: Update resep
+        in: body
+        name: bahan
+        required: true
+        schema:
+          $ref: '#/definitions/models.ResepInput'
+      - description: find resep by id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: Update resep
+      tags:
+      - resep
+  /api/v1/resep/delete/{id}:
+    delete:
+      description: Return data boolean.
+      parameters:
+      - description: delete resep by id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: Delete resep by id.
+      tags:
+      - resep
 swagger: "2.0"

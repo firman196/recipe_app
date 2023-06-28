@@ -333,6 +333,131 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/api/v1/resep": {
+            "post": {
+                "description": "Create a new data resep.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "resep"
+                ],
+                "summary": "Create resep",
+                "parameters": [
+                    {
+                        "description": "Create resep",
+                        "name": "resep",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.ResepInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/resep/delete/{id}": {
+            "delete": {
+                "description": "Return data boolean.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "resep"
+                ],
+                "summary": "Delete resep by id.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "delete resep by id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/resep/{id}": {
+            "get": {
+                "description": "Return data resep where similar with id.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "resep"
+                ],
+                "summary": "Get Single resep by id.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "get resep by id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Update data master resep.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "resep"
+                ],
+                "summary": "Update resep",
+                "parameters": [
+                    {
+                        "description": "Update resep",
+                        "name": "bahan",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.ResepInput"
+                        }
+                    },
+                    {
+                        "type": "integer",
+                        "description": "find resep by id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -358,6 +483,42 @@ const docTemplate = `{
                 }
             }
         },
+        "models.KomposisiInput": {
+            "type": "object",
+            "required": [
+                "bahan_id",
+                "takaran"
+            ],
+            "properties": {
+                "bahan_id": {
+                    "type": "integer"
+                },
+                "takaran": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.ResepInput": {
+            "type": "object",
+            "required": [
+                "kategori_id",
+                "nama"
+            ],
+            "properties": {
+                "kategori_id": {
+                    "type": "integer"
+                },
+                "komposisi": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.KomposisiInput"
+                    }
+                },
+                "nama": {
+                    "type": "string"
+                }
+            }
+        },
         "utils.Meta": {
             "type": "object",
             "properties": {
@@ -378,9 +539,6 @@ const docTemplate = `{
                 "data": {},
                 "meta": {
                     "$ref": "#/definitions/utils.Meta"
-                },
-                "total_list": {
-                    "type": "integer"
                 }
             }
         }

@@ -50,14 +50,18 @@ func main() {
 	//repository layer
 	bahanRepository := repository.NewBahanRepositoryImpl(db)
 	kategoriRepository := repository.NewKategoriRepositoryImpl(db)
+	resepRepository := repository.NewResepRepositoryImpl(db)
+	komposisiRepository := repository.NewKomposisiRepositoryImpl(db)
 
 	//usecase layer
 	bahanUsecase := usecase.NewBahanUsecaseImpl(bahanRepository)
 	kategoriUsecase := usecase.NewKategoriUsecaseImpl(kategoriRepository)
+	resepUsecase := usecase.NewResepUsecaseImpl(db, resepRepository, komposisiRepository)
 
 	//handler layer
 	bahanHandler := handler.NewBahanHandlerImpl(bahanUsecase)
 	kategoriHandler := handler.NewKategoriHandlerImpl(kategoriUsecase)
+	resepHandler := handler.NewResepHandlerImpl(resepUsecase)
 
 	router := gin.Default()
 	router.Use(cors.Default())
@@ -80,6 +84,13 @@ func main() {
 	kategoriRouter.PUT("/:id", kategoriHandler.Update)
 	kategoriRouter.GET("/:id", kategoriHandler.GetById)
 	kategoriRouter.DELETE("/delete/:id", kategoriHandler.Delete)
+
+	//route master resep
+	resepRouter := api.Group("/resep")
+	resepRouter.POST("", resepHandler.Create)
+	resepRouter.PUT("/:id", resepHandler.Update)
+	resepRouter.GET("/:id", resepHandler.GetById)
+	resepRouter.DELETE("/delete/:id", resepHandler.Delete)
 
 	router.Run(":" + appPort)
 }
