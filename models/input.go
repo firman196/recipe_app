@@ -20,7 +20,6 @@ type FilterResepInput struct {
 }
 
 type KomposisiInput struct {
-	Id      uint   `json:"id" binding:"required"`
 	BahanId uint   `json:"bahan_id" binding:"required"`
 	Takaran string `json:"takaran" binding:"required"`
 }

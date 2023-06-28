@@ -34,7 +34,7 @@ func (r *KategoriRepositoryMock) Update(kategori models.Kategori) (*models.Kateg
 }
 
 // Mock repository find bahan by id
-func (r *KategoriRepositoryMock) FindByID(id uint) (*models.Kategori, error) {
+func (r *KategoriRepositoryMock) FindById(id uint) (*models.Kategori, error) {
 	args := r.Called(id)
 	if args.Get(0) == nil {
 		return nil, args.Error(1)

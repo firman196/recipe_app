@@ -69,7 +69,6 @@ func (u *ResepUsecaseImpl) Update(id uint, input models.ResepInput) (*models.Res
 	resep.Komposisi = make([]models.Komposisi, len(input.Komposisi))
 	for i, v := range input.Komposisi {
 		komposisi := models.Komposisi{
-			Id:      v.Id,
 			ResepId: resep.Id,
 			BahanId: v.BahanId,
 			Takaran: v.Takaran,
