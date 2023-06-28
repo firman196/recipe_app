@@ -87,6 +87,7 @@ func main() {
 
 	//route master resep
 	resepRouter := api.Group("/resep")
+	resepRouter.GET("", resepHandler.GetAll)
 	resepRouter.POST("", resepHandler.Create)
 	resepRouter.PUT("/:id", resepHandler.Update)
 	resepRouter.GET("/:id", resepHandler.GetById)

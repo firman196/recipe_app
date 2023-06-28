@@ -11,4 +11,5 @@ type ResepRepository interface {
 	UpdateWithTx(tx *gorm.DB, resep models.Resep) (*models.Resep, error)
 	FindById(id uint) (*models.Resep, error)
 	DeleteWithTx(tx *gorm.DB, id uint) (bool, error)
+	FindAll(resep models.FilterResepInput, pagination *models.PaginationInput) (*[]models.Resep, int64, error)
 }

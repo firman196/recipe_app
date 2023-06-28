@@ -17,10 +17,13 @@ definitions:
     properties:
       bahan_id:
         type: integer
+      id:
+        type: integer
       takaran:
         type: string
     required:
     - bahan_id
+    - id
     - takaran
     type: object
   models.ResepInput:
@@ -266,6 +269,37 @@ paths:
       tags:
       - kategori
   /api/v1/resep:
+    get:
+      description: Return data resep with pagination.
+      parameters:
+      - description: page number
+        in: query
+        name: page
+        required: true
+        type: integer
+      - description: limit number
+        in: query
+        name: limit
+        required: true
+        type: integer
+      - description: kategori name
+        in: query
+        name: kategori
+        type: string
+      - description: bahan name
+        in: query
+        name: bahan
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: Get all data resep with filter.
+      tags:
+      - resep
     post:
       description: Create a new data resep.
       parameters:
