@@ -351,7 +351,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.Resep"
+                            "$ref": "#/definitions/models.ResepInput"
                         }
                     }
                 ],
@@ -438,7 +438,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.Resep"
+                            "$ref": "#/definitions/models.ResepInput"
                         }
                     },
                     {
@@ -461,35 +461,6 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "models.Bahan": {
-            "type": "object",
-            "required": [
-                "name"
-            ],
-            "properties": {
-                "created_at": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "is_deleted": {
-                    "type": "boolean"
-                },
-                "komposisi": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/models.Komposisi"
-                    }
-                },
-                "name": {
-                    "type": "string"
-                },
-                "updated_at": {
-                    "type": "string"
-                }
-            }
-        },
         "models.BahanInput": {
             "type": "object",
             "required": [
@@ -497,29 +468,6 @@ const docTemplate = `{
             ],
             "properties": {
                 "nama": {
-                    "type": "string"
-                }
-            }
-        },
-        "models.Kategori": {
-            "type": "object",
-            "required": [
-                "name"
-            ],
-            "properties": {
-                "created_at": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "is_deleted": {
-                    "type": "boolean"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "updated_at": {
                     "type": "string"
                 }
             }
@@ -535,69 +483,38 @@ const docTemplate = `{
                 }
             }
         },
-        "models.Komposisi": {
+        "models.KomposisiInput": {
             "type": "object",
             "required": [
                 "bahan_id",
-                "resep_id",
                 "takaran"
             ],
             "properties": {
-                "bahan": {
-                    "$ref": "#/definitions/models.Bahan"
-                },
                 "bahan_id": {
-                    "type": "integer"
-                },
-                "created_at": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "resep": {
-                    "$ref": "#/definitions/models.Resep"
-                },
-                "resep_id": {
                     "type": "integer"
                 },
                 "takaran": {
                     "type": "string"
-                },
-                "updated_at": {
-                    "type": "string"
                 }
             }
         },
-        "models.Resep": {
+        "models.ResepInput": {
             "type": "object",
             "required": [
                 "kategori_id",
-                "name"
+                "nama"
             ],
             "properties": {
-                "created_at": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "kategori": {
-                    "$ref": "#/definitions/models.Kategori"
-                },
                 "kategori_id": {
                     "type": "integer"
                 },
                 "komposisi": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/models.Komposisi"
+                        "$ref": "#/definitions/models.KomposisiInput"
                     }
                 },
-                "name": {
-                    "type": "string"
-                },
-                "updated_at": {
+                "nama": {
                     "type": "string"
                 }
             }
@@ -622,9 +539,6 @@ const docTemplate = `{
                 "data": {},
                 "meta": {
                     "$ref": "#/definitions/utils.Meta"
-                },
-                "total_list": {
-                    "type": "integer"
                 }
             }
         }

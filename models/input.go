@@ -9,12 +9,13 @@ type KategoriInput struct {
 }
 
 type ResepInput struct {
-	Nama       string           `json:"name" binding:"required"`
+	Nama       string           `json:"nama" binding:"required"`
 	KategoriId uint             `json:"kategori_id" binding:"required"`
 	Komposisi  []KomposisiInput `json:"komposisi"`
 }
 
 type KomposisiInput struct {
+	Id      uint   `json:"id" binding:"required"`
 	BahanId uint   `json:"bahan_id" binding:"required"`
 	Takaran string `json:"takaran" binding:"required"`
 }

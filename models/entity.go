@@ -7,17 +7,16 @@ import (
 )
 
 type Bahan struct {
-	Id        uint        `gorm:"primaryKey; not null" json:"id"`
-	Nama      string      `gorm:"size:100;not null" json:"name" binding:"required"`
-	CreatedAt time.Time   `json:"created_at"`
-	UpdatedAt time.Time   `json:"updated_at"`
-	IsDeleted bool        `gorm:"default:false" json:"is_deleted"`
-	Komposisi []Komposisi `gorm:"foreignKey:BahanId;references:Id;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
+	Id        uint      `gorm:"primaryKey; not null" json:"id"`
+	Nama      string    `gorm:"size:100;not null" json:"nama" binding:"required"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
+	IsDeleted bool      `gorm:"default:false" json:"is_deleted"`
 }
 
 type Kategori struct {
 	Id        uint      `gorm:"primaryKey; not null" json:"id"`
-	Nama      string    `gorm:"size:100;not null" json:"name" binding:"required"`
+	Nama      string    `gorm:"size:100;not null" json:"nama" binding:"required"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
 	IsDeleted bool      `gorm:"default:false" json:"is_deleted"`
@@ -25,12 +24,12 @@ type Kategori struct {
 
 type Resep struct {
 	Id         uint        `gorm:"primaryKey; not null" json:"id"`
-	Nama       string      `gorm:"size:100;not null" json:"name" binding:"required"`
+	Nama       string      `gorm:"size:100;not null" json:"nama" binding:"required"`
 	KategoriId uint        `gorm:"not null; autoIncrement:false" json:"kategori_id" binding:"required"`
 	CreatedAt  time.Time   `json:"created_at"`
 	UpdatedAt  time.Time   `json:"updated_at"`
-	Kategori   Kategori    `gorm:"foreignKey:KategoriId;references:Id;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
-	Komposisi  []Komposisi `gorm:"foreignKey:ResepId;references:Id;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
+	Kategori   Kategori    `gorm:"foreignKey:KategoriId;references:Id;constraint:OnUpdate:CASCADE,OnDelete:CASCADE" json:"kategori"`
+	Komposisi  []Komposisi `gorm:"foreignKey:ResepId;references:Id;constraint:OnUpdate:CASCADE,OnDelete:CASCADE" json:"komposisi"`
 }
 
 type Komposisi struct {
@@ -40,6 +39,5 @@ type Komposisi struct {
 	Takaran   string    `gorm:"size:100;not null" json:"takaran" binding:"required"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
-	Bahan     Bahan     `gorm:"foreignKey:BahanId;references:Id;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
-	Resep     Resep     `gorm:"foreignKey:ResepId;references:Id;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
+	Bahan     Bahan     `gorm:"foreignKey:BahanId;references:Id;constraint:OnUpdate:CASCADE,OnDelete:CASCADE" json:"bahan"`
 }

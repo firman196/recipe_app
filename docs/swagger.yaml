@@ -1,44 +1,10 @@
 definitions:
-  models.Bahan:
-    properties:
-      created_at:
-        type: string
-      id:
-        type: integer
-      is_deleted:
-        type: boolean
-      komposisi:
-        items:
-          $ref: '#/definitions/models.Komposisi'
-        type: array
-      name:
-        type: string
-      updated_at:
-        type: string
-    required:
-    - name
-    type: object
   models.BahanInput:
     properties:
       nama:
         type: string
     required:
     - nama
-    type: object
-  models.Kategori:
-    properties:
-      created_at:
-        type: string
-      id:
-        type: integer
-      is_deleted:
-        type: boolean
-      name:
-        type: string
-      updated_at:
-        type: string
-    required:
-    - name
     type: object
   models.KategoriInput:
     properties:
@@ -47,50 +13,29 @@ definitions:
     required:
     - nama
     type: object
-  models.Komposisi:
+  models.KomposisiInput:
     properties:
-      bahan:
-        $ref: '#/definitions/models.Bahan'
       bahan_id:
-        type: integer
-      created_at:
-        type: string
-      id:
-        type: integer
-      resep:
-        $ref: '#/definitions/models.Resep'
-      resep_id:
         type: integer
       takaran:
         type: string
-      updated_at:
-        type: string
     required:
     - bahan_id
-    - resep_id
     - takaran
     type: object
-  models.Resep:
+  models.ResepInput:
     properties:
-      created_at:
-        type: string
-      id:
-        type: integer
-      kategori:
-        $ref: '#/definitions/models.Kategori'
       kategori_id:
         type: integer
       komposisi:
         items:
-          $ref: '#/definitions/models.Komposisi'
+          $ref: '#/definitions/models.KomposisiInput'
         type: array
-      name:
-        type: string
-      updated_at:
+      nama:
         type: string
     required:
     - kategori_id
-    - name
+    - nama
     type: object
   utils.Meta:
     properties:
@@ -106,8 +51,6 @@ definitions:
       data: {}
       meta:
         $ref: '#/definitions/utils.Meta'
-      total_list:
-        type: integer
     type: object
 info:
   contact: {}
@@ -331,7 +274,7 @@ paths:
         name: resep
         required: true
         schema:
-          $ref: '#/definitions/models.Resep'
+          $ref: '#/definitions/models.ResepInput'
       produces:
       - application/json
       responses:
@@ -369,7 +312,7 @@ paths:
         name: bahan
         required: true
         schema:
-          $ref: '#/definitions/models.Resep'
+          $ref: '#/definitions/models.ResepInput'
       - description: find resep by id
         in: path
         name: id

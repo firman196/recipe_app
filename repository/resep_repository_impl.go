@@ -35,7 +35,7 @@ func (r *ResepRepositoryImpl) UpdateWithTx(tx *gorm.DB, resep models.Resep) (*mo
 
 func (r *ResepRepositoryImpl) FindById(id uint) (*models.Resep, error) {
 	var resep models.Resep
-	err := r.db.Model(&resep).Where("id =?", id).First(&resep).Error
+	err := r.db.Model(&resep).Where("id =?", id).Preload("Komposisi").Preload("Komposisi.Bahan").Preload("Kategori").First(&resep).Error
 	if err != nil {
 		return nil, err
 	}

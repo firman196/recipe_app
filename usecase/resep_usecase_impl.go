@@ -9,15 +9,14 @@ import (
 )
 
 type ResepUsecaseImpl struct {
-	db                  *gorm.DB
-	resepRepository     repository.ResepRepository
-	komposisiRepository repository.KomposisiRepository
+	db              *gorm.DB
+	resepRepository repository.ResepRepository
 }
 
-func NewResepUsecaseImpl(resepRepository repository.ResepRepository, komposisiRepository repository.KomposisiRepository) ResepUsecase {
+func NewResepUsecaseImpl(db *gorm.DB, resepRepository repository.ResepRepository) ResepUsecase {
 	return &ResepUsecaseImpl{
-		resepRepository:     resepRepository,
-		komposisiRepository: komposisiRepository,
+		db:              db,
+		resepRepository: resepRepository,
 	}
 }
 
@@ -27,6 +26,7 @@ func (u *ResepUsecaseImpl) Create(input models.ResepInput) (*models.Resep, error
 	resep := models.Resep{}
 	resep.Nama = input.Nama
 	resep.KategoriId = input.KategoriId
+	resep.Komposisi = make([]models.Komposisi, len(input.Komposisi))
 	for i, v := range input.Komposisi {
 		komposisi := models.Komposisi{
 			ResepId: resep.Id,
@@ -55,8 +55,10 @@ func (u *ResepUsecaseImpl) Update(id uint, input models.ResepInput) (*models.Res
 	resep := models.Resep{}
 	resep.Nama = input.Nama
 	resep.KategoriId = input.KategoriId
+	resep.Komposisi = make([]models.Komposisi, len(input.Komposisi))
 	for i, v := range input.Komposisi {
 		komposisi := models.Komposisi{
+			Id:      v.Id,
 			ResepId: resep.Id,
 			BahanId: v.BahanId,
 			Takaran: v.Takaran,
