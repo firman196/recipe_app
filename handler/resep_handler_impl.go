@@ -142,3 +142,50 @@ func (h *ResepHandlerImpl) Delete(c *gin.Context) {
 	response := utils.ApiResponse("Delete data resep success", http.StatusOK, "success", resep)
 	c.JSON(http.StatusOK, response)
 }
+
+// GetAll 				godoc
+// @Summary				Get all data resep with filter.
+// @Param				page query int64 true "page number"
+// @Param				limit query int64 true "limit number"
+// @Param				kategori query string false "kategori name"
+// @Param				bahan query string false "bahan name"
+// @Description			Return data resep with pagination.
+// @Produce				application/json
+// @Tags				resep
+// @Success				200 {object} utils.Response
+// @Router				/api/v1/resep [get]
+func (h *ResepHandlerImpl) GetAll(c *gin.Context) {
+	pagination := utils.Pagination(c)
+	query := c.Request.URL.Query()
+	kategori := ""
+	bahan := ""
+	for key, value := range query {
+		queryValue := value[len(value)-1]
+		switch key {
+		case "kategori":
+			kategori = queryValue
+			break
+		case "bahan":
+			bahan = queryValue
+			break
+		}
+	}
+	var filter = models.FilterResepInput{}
+
+	if kategori != "" {
+		filter.Kategori = &kategori
+	}
+	if bahan != "" {
+		filter.Bahan = &bahan
+	}
+
+	response, totalRows, err := h.resepUsecase.GetAll(&filter, &pagination)
+	if err != nil {
+		response := utils.ApiResponseWithPaginate("Get all data resep failed", http.StatusBadRequest, "error", err, &totalRows)
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
+	responses := utils.ApiResponseWithPaginate("Get data resep success", http.StatusOK, "success", response, &totalRows)
+	c.JSON(http.StatusOK, responses)
+}

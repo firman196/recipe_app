@@ -91,6 +91,15 @@ func (u *ResepUsecaseImpl) GetById(id uint) (*models.Resep, error) {
 	return response, nil
 }
 
+func (u *ResepUsecaseImpl) GetAll(filter *models.FilterResepInput, pagination *models.PaginationInput) (*[]models.Resep, int64, error) {
+	response, totalRows, err := u.resepRepository.FindAll(*filter, pagination)
+	if err != nil {
+		return nil, 0, err
+	}
+
+	return response, totalRows, err
+}
+
 func (u *ResepUsecaseImpl) Delete(id uint) (bool, error) {
 	tx := u.db.Begin()
 	resep, err := u.resepRepository.FindById(id)

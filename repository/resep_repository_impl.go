@@ -53,3 +53,34 @@ func (r *ResepRepositoryImpl) DeleteWithTx(tx *gorm.DB, id uint) (bool, error) {
 
 	return true, nil
 }
+
+func (r *ResepRepositoryImpl) FindAll(resep models.FilterResepInput, pagination *models.PaginationInput) (*[]models.Resep, int64, error) {
+	var reseps []models.Resep
+	var totalRows int64 = 0
+	offset := (pagination.Page - 1) * pagination.Limit
+	queryBuider := r.db.Limit(pagination.Limit).Offset(offset).Order(pagination.Sort)
+	query := queryBuider.Model(&models.Resep{}).Preload("Komposisi").Preload("Komposisi.Bahan").Preload("Kategori")
+	if resep.Kategori != nil {
+		query.Joins(
+			"JOIN kategoris ON reseps.kategori_id = kategoris.id WHERE kategoris.nama LIKE ? ",
+			"%"+*resep.Kategori+"%",
+		)
+	}
+
+	if resep.Bahan != nil {
+		query.Joins(
+			"JOIN komposisis ON reseps.id = komposisis.resep_id JOIN bahans ON komposisis.bahan_id = bahans.id  WHERE bahans.nama LIKE ? ",
+			"%"+*resep.Bahan+"%",
+		)
+	}
+	result := query.Find(&reseps)
+	if result.Error != nil {
+		err := result.Error
+		return nil, totalRows, err
+	}
+	errCount := r.db.Model(&models.Resep{}).Count(&totalRows).Error
+	if errCount != nil {
+		return nil, totalRows, errCount
+	}
+	return &reseps, totalRows, nil
+}

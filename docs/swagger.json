@@ -323,6 +323,52 @@
             }
         },
         "/api/v1/resep": {
+            "get": {
+                "description": "Return data resep with pagination.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "resep"
+                ],
+                "summary": "Get all data resep with filter.",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "page number",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "limit number",
+                        "name": "limit",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "kategori name",
+                        "name": "kategori",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "bahan name",
+                        "name": "bahan",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            },
             "post": {
                 "description": "Create a new data resep.",
                 "produces": [
@@ -475,10 +521,14 @@
             "type": "object",
             "required": [
                 "bahan_id",
+                "id",
                 "takaran"
             ],
             "properties": {
                 "bahan_id": {
+                    "type": "integer"
+                },
+                "id": {
                     "type": "integer"
                 },
                 "takaran": {

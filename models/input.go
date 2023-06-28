@@ -14,6 +14,11 @@ type ResepInput struct {
 	Komposisi  []KomposisiInput `json:"komposisi"`
 }
 
+type FilterResepInput struct {
+	Bahan    *string `json:"bahan"`
+	Kategori *string `json:"kategori"`
+}
+
 type KomposisiInput struct {
 	Id      uint   `json:"id" binding:"required"`
 	BahanId uint   `json:"bahan_id" binding:"required"`
