@@ -23,7 +23,7 @@ This project build using google language (golang) for teknikal test in TLAB
 - [gorm v1.25.1](https://gorm.io/)
 
 # Installation #
-- git clone https://github.com/firman196/jakpat-inventory-test.git
+- git clone https://github.com/firman196/recipe_app.git
 - rename .env.example to .env
 - set configuration database
 - go run main.go
