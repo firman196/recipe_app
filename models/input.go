@@ -9,11 +9,14 @@ type KategoriInput struct {
 }
 
 type ResepInput struct {
-	Nama       string `json:"name" binding:"required"`
-	KategoriId uint   `json:"kategori_id" binding:"required"`
-	ResepId    uint   `json:"resep_id" binding:"required"`
-	BahanId    uint   `json:"bahan_id" binding:"required"`
-	Takaran    string `json:"takaran" binding:"required"`
+	Nama       string           `json:"name" binding:"required"`
+	KategoriId uint             `json:"kategori_id" binding:"required"`
+	Komposisi  []KomposisiInput `json:"komposisi"`
+}
+
+type KomposisiInput struct {
+	BahanId uint   `json:"bahan_id" binding:"required"`
+	Takaran string `json:"takaran" binding:"required"`
 }
 
 type PaginationInput struct {

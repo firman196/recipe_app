@@ -10,5 +10,5 @@ type ResepRepository interface {
 	CreateWithTx(tx *gorm.DB, resep models.Resep) (*models.Resep, error)
 	UpdateWithTx(tx *gorm.DB, resep models.Resep) (*models.Resep, error)
 	FindById(id uint) (*models.Resep, error)
-	DeleteWithTx(*models.Resep,id uint) (bool, error)
+	DeleteWithTx(tx *gorm.DB, id uint) (bool, error)
 }
