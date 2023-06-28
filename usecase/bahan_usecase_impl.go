@@ -30,12 +30,9 @@ func (u *BahanUsecaseImpl) Create(bahan models.BahanInput) (*models.Bahan, error
 }
 
 func (u *BahanUsecaseImpl) GetAll(pagination *models.PaginationInput) (*[]models.Bahan, int64, error) {
-	var bahans models.Bahan
-
-	response, totalRows, err := u.bahanRepository.FindAll(bahans, pagination)
-
+	response, totalRows, err := u.bahanRepository.FindAll(pagination)
 	if err != nil {
-		return nil, 0, err
+		return nil, int64(0), err
 	}
 
 	return response, totalRows, err
@@ -44,13 +41,12 @@ func (u *BahanUsecaseImpl) GetAll(pagination *models.PaginationInput) (*[]models
 func (u *BahanUsecaseImpl) Update(id uint, bahan models.BahanInput) (*models.Bahan, error) {
 	val, err := u.bahanRepository.FindById(id)
 	if err != nil || val == nil {
-		return nil, errors.New("data not found")
+		return nil, err
 	}
 
 	newBahan := models.Bahan{
-		Id:        id,
-		Nama:      bahan.Nama,
-		UpdatedAt: time.Now(),
+		Id:   val.Id,
+		Nama: bahan.Nama,
 	}
 	response, err := u.bahanRepository.Update(newBahan)
 	if err != nil {
@@ -60,8 +56,10 @@ func (u *BahanUsecaseImpl) Update(id uint, bahan models.BahanInput) (*models.Bah
 }
 
 func (u *BahanUsecaseImpl) GetById(id uint) (*models.Bahan, error) {
-	response, _ := u.bahanRepository.FindById(id)
-
+	response, err := u.bahanRepository.FindById(id)
+	if err != nil {
+		return nil, err
+	}
 	return response, nil
 }
 
