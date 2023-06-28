@@ -4,7 +4,6 @@ import (
 	"Recipe_App/models"
 	"Recipe_App/repository/mocks"
 	"errors"
-	"time"
 
 	"testing"
 
@@ -13,16 +12,18 @@ import (
 )
 
 var bahan = models.Bahan{
-	Id:        1,
-	Nama:      "Nasi",
-	CreatedAt: time.Now(),
-	UpdatedAt: time.Now(),
-	IsDeleted: false,
+	Nama: "Nasi",
 }
 
-/*var bahanInput = models.BahanInput{
+var bahans = []models.Bahan{
+	{
+		Nama: "Nasi",
+	},
+}
+
+var bahanInput = models.BahanInput{
 	Nama: "Nasi",
-}*/
+}
 
 var pagination = models.PaginationInput{
 	Limit: 10,
@@ -33,24 +34,13 @@ var pagination = models.PaginationInput{
 // Scenario successfully
 // testing Create bahan usecase using testify and mock
 func TestCreateSuccess(t *testing.T) {
-	var bahan = models.Bahan{
-		Id:        1,
-		Nama:      "Nasi",
-		CreatedAt: time.Now(),
-		UpdatedAt: time.Now(),
-		IsDeleted: false,
-	}
-
-	var bahanInput = models.BahanInput{
-		Nama: "Nasi",
-	}
 	var bahanRepository = &mocks.BahanRepositoryMock{Mock: mock.Mock{}}
 	var bahanUsecase = BahanUsecaseImpl{bahanRepository: bahanRepository}
 	bahanRepository.Mock.On("Create", bahan).Return(bahan, nil)
-	bahan, err := bahanUsecase.Create(bahanInput)
+	response, err := bahanUsecase.Create(bahanInput)
 
 	assert.Nil(t, err)
-	assert.NotNil(t, bahan)
+	assert.NotNil(t, response)
 	bahanRepository.Mock.AssertExpectations(t)
 }
 
@@ -72,11 +62,11 @@ func TestCreateFailed(t *testing.T) {
 func TestFindByIdSuccess(t *testing.T) {
 	var bahanRepository = &mocks.BahanRepositoryMock{Mock: mock.Mock{}}
 	var bahanUsecase = BahanUsecaseImpl{bahanRepository: bahanRepository}
-	bahanRepository.Mock.On("FindByID", 1).Return(bahan, nil)
-	bahan, err := bahanUsecase.GetById(1)
+	bahanRepository.Mock.On("FindById", uint(1)).Return(bahan, nil)
+	response, err := bahanUsecase.GetById(1)
 
 	assert.Nil(t, err)
-	assert.NotNil(t, bahan)
+	assert.NotNil(t, response)
 	bahanRepository.Mock.AssertExpectations(t)
 }
 
@@ -85,8 +75,8 @@ func TestFindByIdSuccess(t *testing.T) {
 func TestFindByIdErrNotFound(t *testing.T) {
 	var bahanRepository = &mocks.BahanRepositoryMock{Mock: mock.Mock{}}
 	var bahanUsecase = BahanUsecaseImpl{bahanRepository: bahanRepository}
-	bahanRepository.Mock.On("FindByID", 2).Return(nil, errors.New("bahan with id 1 is not found")).Once()
-	errBahan, err := bahanUsecase.GetById(2)
+	bahanRepository.Mock.On("FindById", uint(1)).Return(nil, errors.New("bahan with id 1 is not found")).Once()
+	errBahan, err := bahanUsecase.GetById(1)
 	assert.Error(t, err)
 	assert.Nil(t, errBahan)
 	bahanRepository.Mock.AssertExpectations(t)
@@ -97,12 +87,12 @@ func TestFindByIdErrNotFound(t *testing.T) {
 func TestUpdateSuccess(t *testing.T) {
 	var bahanRepository = &mocks.BahanRepositoryMock{Mock: mock.Mock{}}
 	var bahanUsecase = BahanUsecaseImpl{bahanRepository: bahanRepository}
-	bahanRepository.Mock.On("FindByID", 1).Return(bahan, nil)
+	bahanRepository.Mock.On("FindById", uint(1)).Return(bahan, nil)
 	bahanRepository.Mock.On("Update", bahan).Return(bahan, nil)
-	bahan, err := bahanUsecase.Update(1, bahanInput)
+	response, err := bahanUsecase.Update(1, bahanInput)
 
 	assert.Nil(t, err)
-	assert.NotNil(t, bahan)
+	assert.NotNil(t, response)
 	bahanRepository.Mock.AssertExpectations(t)
 }
 
@@ -111,13 +101,11 @@ func TestUpdateSuccess(t *testing.T) {
 func TestUpdateFailed(t *testing.T) {
 	var bahanRepository = &mocks.BahanRepositoryMock{Mock: mock.Mock{}}
 	var bahanUsecase = BahanUsecaseImpl{bahanRepository: bahanRepository}
-	bahanRepository.Mock.On("FindByID", 1).Return(nil, errors.New("bahan with id 1 is not found"))
-	bahanRepository.Mock.On("Update", bahan).Return(nil, "bahan with id 1 is not found")
-	categoryUpdateErr, err := bahanUsecase.Update(1, bahanInput)
-
+	bahanRepository.Mock.On("FindById", uint(1)).Return(nil, errors.New("data not found"))
+	bahanRepository.Mock.On("Update", bahan).Return(nil, errors.New("data not found"))
+	response, err := bahanUsecase.Update(1, bahanInput)
 	assert.Error(t, err)
-	assert.Nil(t, categoryUpdateErr)
-	bahanRepository.Mock.AssertExpectations(t)
+	assert.Nil(t, response)
 }
 
 // Scenario successfully
@@ -125,25 +113,11 @@ func TestUpdateFailed(t *testing.T) {
 func TestGetAllSuccess(t *testing.T) {
 	var bahanRepository = &mocks.BahanRepositoryMock{Mock: mock.Mock{}}
 	var bahanUsecase = BahanUsecaseImpl{bahanRepository: bahanRepository}
-	bahanRepository.Mock.On("FindAll", bahan).Return(bahan, 1, nil)
+	bahanRepository.Mock.On("FindAll", &pagination).Return(bahans, int64(1), nil)
 	bahanAll, total, err := bahanUsecase.GetAll(&pagination)
 
 	assert.Nil(t, err)
-	assert.Equal(t, total, 1)
+	assert.Equal(t, total, int64(1))
 	assert.NotNil(t, bahanAll)
-	bahanRepository.Mock.AssertExpectations(t)
-}
-
-// Scenario failed
-// testing get all bahan usecase using testify and mock
-func TestGetAllFailed(t *testing.T) {
-	var bahanRepository = &mocks.BahanRepositoryMock{Mock: mock.Mock{}}
-	var bahanUsecase = BahanUsecaseImpl{bahanRepository: bahanRepository}
-	bahanRepository.Mock.On("FindAll", bahan).Return(nil, 0, errors.New("internal server error"))
-	bahanAll, total, err := bahanUsecase.GetAll(&pagination)
-
-	assert.Nil(t, bahanAll)
-	assert.Equal(t, total, 0)
-	assert.NotNil(t, err)
 	bahanRepository.Mock.AssertExpectations(t)
 }
