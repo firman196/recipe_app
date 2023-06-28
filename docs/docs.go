@@ -533,14 +533,10 @@ const docTemplate = `{
             "type": "object",
             "required": [
                 "bahan_id",
-                "id",
                 "takaran"
             ],
             "properties": {
                 "bahan_id": {
-                    "type": "integer"
-                },
-                "id": {
                     "type": "integer"
                 },
                 "takaran": {

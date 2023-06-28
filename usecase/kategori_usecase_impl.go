@@ -36,9 +36,8 @@ func (u *KategoriUsecaseImpl) Update(id uint, bahan models.KategoriInput) (*mode
 	}
 
 	newKategori := models.Kategori{
-		Id:        id,
-		Nama:      bahan.Nama,
-		UpdatedAt: time.Now(),
+		Id:   val.Id,
+		Nama: bahan.Nama,
 	}
 	response, err := u.kategoriRepository.Update(newKategori)
 	if err != nil {
@@ -48,15 +47,15 @@ func (u *KategoriUsecaseImpl) Update(id uint, bahan models.KategoriInput) (*mode
 }
 
 func (u *KategoriUsecaseImpl) GetById(id uint) (*models.Kategori, error) {
-	response, _ := u.kategoriRepository.FindById(id)
-
+	response, err := u.kategoriRepository.FindById(id)
+	if err != nil {
+		return nil, err
+	}
 	return response, nil
 }
 
 func (u *KategoriUsecaseImpl) GetAll(pagination *models.PaginationInput) (*[]models.Kategori, int64, error) {
-	var kategori models.Kategori
-
-	response, totalRows, err := u.kategoriRepository.FindAll(kategori, pagination)
+	response, totalRows, err := u.kategoriRepository.FindAll(pagination)
 
 	if err != nil {
 		return nil, 0, err

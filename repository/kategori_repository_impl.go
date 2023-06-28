@@ -2,6 +2,7 @@ package repository
 
 import (
 	"Recipe_App/models"
+	"time"
 
 	"gorm.io/gorm"
 )
@@ -26,6 +27,7 @@ func (r *KategoriRepositoryImpl) Create(kategori models.Kategori) (*models.Kateg
 }
 
 func (r *KategoriRepositoryImpl) Update(kategori models.Kategori) (*models.Kategori, error) {
+	kategori.UpdatedAt = time.Now()
 	err := r.db.Model(&kategori).Where("id = ?", kategori.Id).Where("is_deleted =?", false).Updates(&kategori).Error
 	if err != nil {
 		return nil, err
@@ -43,12 +45,12 @@ func (r *KategoriRepositoryImpl) FindById(id uint) (*models.Kategori, error) {
 	return &kategori, nil
 }
 
-func (r *KategoriRepositoryImpl) FindAll(kategori models.Kategori, pagination *models.PaginationInput) (*[]models.Kategori, int64, error) {
+func (r *KategoriRepositoryImpl) FindAll(pagination *models.PaginationInput) (*[]models.Kategori, int64, error) {
 	var kategories []models.Kategori
 	var totalRows int64 = 0
 	offset := (pagination.Page - 1) * pagination.Limit
 	queryBuider := r.db.Limit(pagination.Limit).Offset(offset).Order(pagination.Sort)
-	result := queryBuider.Model(&models.Kategori{}).Where(kategori).Where("is_deleted=?", false).Find(&kategories)
+	result := queryBuider.Model(&models.Kategori{}).Where("is_deleted=?", false).Find(&kategories)
 	if result.Error != nil {
 		err := result.Error
 		return nil, totalRows, err

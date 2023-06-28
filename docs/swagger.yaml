@@ -17,13 +17,10 @@ definitions:
     properties:
       bahan_id:
         type: integer
-      id:
-        type: integer
       takaran:
         type: string
     required:
     - bahan_id
-    - id
     - takaran
     type: object
   models.ResepInput:

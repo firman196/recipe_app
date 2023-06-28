@@ -55,11 +55,12 @@ func (r *KategoriRepositoryMock) Delete(id uint) (bool, error) {
 }
 
 // Mock repository find all data master bahan
-func (r *KategoriRepositoryMock) FindAll(kategori models.Kategori, pagination *models.PaginationInput) (*[]models.Kategori, int64, error) {
-	args := r.Called(kategori)
+func (r *KategoriRepositoryMock) FindAll(pagination *models.PaginationInput) (*[]models.Kategori, int64, error) {
+	args := r.Called(pagination)
 	if args.Get(0) == nil {
 		return nil, args.Get(1).(int64), args.Error(1)
 	} else {
-		return &[]models.Kategori{kategori}, args.Get(1).(int64), nil
+		result := args.Get(0).([]models.Kategori)
+		return &result, args.Get(1).(int64), nil
 	}
 }
