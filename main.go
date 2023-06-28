@@ -51,11 +51,12 @@ func main() {
 	bahanRepository := repository.NewBahanRepositoryImpl(db)
 	kategoriRepository := repository.NewKategoriRepositoryImpl(db)
 	resepRepository := repository.NewResepRepositoryImpl(db)
+	komposisiRepository := repository.NewKomposisiRepositoryImpl(db)
 
 	//usecase layer
 	bahanUsecase := usecase.NewBahanUsecaseImpl(bahanRepository)
 	kategoriUsecase := usecase.NewKategoriUsecaseImpl(kategoriRepository)
-	resepUsecase := usecase.NewResepUsecaseImpl(db, resepRepository)
+	resepUsecase := usecase.NewResepUsecaseImpl(db, resepRepository, komposisiRepository)
 
 	//handler layer
 	bahanHandler := handler.NewBahanHandlerImpl(bahanUsecase)

@@ -4,19 +4,22 @@ import (
 	"Recipe_App/models"
 	"Recipe_App/repository"
 	"errors"
+	"time"
 
 	"gorm.io/gorm"
 )
 
 type ResepUsecaseImpl struct {
-	db              *gorm.DB
-	resepRepository repository.ResepRepository
+	db                  *gorm.DB
+	resepRepository     repository.ResepRepository
+	komposisiRepository repository.KomposisiRepository
 }
 
-func NewResepUsecaseImpl(db *gorm.DB, resepRepository repository.ResepRepository) ResepUsecase {
+func NewResepUsecaseImpl(db *gorm.DB, resepRepository repository.ResepRepository, komposisiRepository repository.KomposisiRepository) ResepUsecase {
 	return &ResepUsecaseImpl{
-		db:              db,
-		resepRepository: resepRepository,
+		db:                  db,
+		resepRepository:     resepRepository,
+		komposisiRepository: komposisiRepository,
 	}
 }
 
@@ -52,9 +55,17 @@ func (u *ResepUsecaseImpl) Update(id uint, input models.ResepInput) (*models.Res
 		return nil, errors.New("data not found")
 	}
 
+	del, errDel := u.komposisiRepository.DeleteWithTx(tx, val.Id)
+	if errDel != nil || !del {
+		tx.Rollback()
+		return nil, errDel
+	}
 	resep := models.Resep{}
+	resep.Id = val.Id
 	resep.Nama = input.Nama
 	resep.KategoriId = input.KategoriId
+	resep.CreatedAt = val.CreatedAt
+	resep.UpdatedAt = time.Now()
 	resep.Komposisi = make([]models.Komposisi, len(input.Komposisi))
 	for i, v := range input.Komposisi {
 		komposisi := models.Komposisi{

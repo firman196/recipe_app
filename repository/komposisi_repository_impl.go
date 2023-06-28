@@ -43,7 +43,7 @@ func (r *KomposisiRepositoryImpl) FindById(id uint) (*models.Komposisi, error) {
 }
 
 func (r *KomposisiRepositoryImpl) DeleteWithTx(tx *gorm.DB, id uint) (bool, error) {
-	err := tx.Where("id = ?", id).Delete(&models.Komposisi{}).Error
+	err := tx.Where("resep_id = ?", id).Delete(&models.Komposisi{}).Error
 	if err != nil {
 		return false, err
 	}

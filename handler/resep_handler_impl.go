@@ -139,6 +139,6 @@ func (h *ResepHandlerImpl) Delete(c *gin.Context) {
 		return
 	}
 
-	response := utils.ApiResponse("Get data resep success", http.StatusOK, "success", resep)
+	response := utils.ApiResponse("Delete data resep success", http.StatusOK, "success", resep)
 	c.JSON(http.StatusOK, response)
 }

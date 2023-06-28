@@ -2,6 +2,7 @@ package repository
 
 import (
 	"Recipe_App/models"
+	"errors"
 
 	"gorm.io/gorm"
 )
@@ -26,9 +27,10 @@ func (r *ResepRepositoryImpl) CreateWithTx(tx *gorm.DB, resep models.Resep) (*mo
 }
 
 func (r *ResepRepositoryImpl) UpdateWithTx(tx *gorm.DB, resep models.Resep) (*models.Resep, error) {
-	err := tx.Model(&resep).Where("id = ?", resep.Id).Updates(&resep).Error
+	tx.Model(&resep).Where("id = ?", resep.Id).Association("Komposisi").Replace(resep.Komposisi)
+	err := tx.Save(&resep).Error
 	if err != nil {
-		return nil, err
+		return nil, errors.New("failed")
 	}
 	return &resep, nil
 }
